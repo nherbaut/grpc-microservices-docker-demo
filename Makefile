@@ -1,5 +1,9 @@
 .DEFAULT_GOAL := all
 
+.PHONY prereq_python:
+	@pip install grpcio-tools 
+
+
 doc:
 	@echo generating doc 
 	@sudo docker run --rm -v $(PWD)/doc:/out -v $(PWD)/protos:/protos   pseudomuto/protoc-gen-doc
@@ -10,17 +14,10 @@ clean:
 	rm -rf doc
 	rm -rf */generated
 
-.DEFAULT all: clean python java js
+.DEFAULT all: clean python
 
-python: python/generated_grpc_stubs 
+python: prereq_python python_grpc
 	@echo python
 
-java: java/generated_grpc_stubs 
-	@echo java
-js: js/generated_grpc_stubs
-	@echo js
-
-.SECONDEXPANSION:
-%/generated_grpc_stubs: 
-	@mkdir $*/generated
-	@protoc -I=. --$*_out=$*/generated protos/demo.proto
+python_grpc: 
+	python -m grpc_tools.protoc -Iprotos --python_out=python --grpc_python_out=python protos/demo.proto

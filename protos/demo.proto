@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+option java_multiple_files = true;
 option java_package = "com.variamos.ng";
 
 
@@ -8,12 +9,15 @@ package variamosgrpc;
 
 service ModelPublisher {
   
-  rpc pushModel (stream Model) returns (stream Model) {}
+  rpc listenModels (Empty ) returns (stream Model) {} 
+  rpc pushModel ( Model ) returns (Empty) {}
 }
 
+message Empty {}
 
 message Model {
   string message = 1;
+  int64 counter = 2;
 }
 
 
