@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from concurrent import futures
 import time
 import logging
@@ -5,9 +7,9 @@ import grpc
 import demo_pb2
 import demo_pb2_grpc
 import threading
-
+import os
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
-
+port=os.environ['PORT']
 
 class ModelPusher(demo_pb2_grpc.ModelPublisherServicer):
     @classmethod
@@ -37,9 +39,9 @@ class ModelPusher(demo_pb2_grpc.ModelPublisherServicer):
 
 
 def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), )
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=100), )
     demo_pb2_grpc.add_ModelPublisherServicer_to_server(ModelPusher(server), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:%s'%port)
     server.start()
     try:
         while True:

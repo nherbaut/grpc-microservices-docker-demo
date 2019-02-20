@@ -1,17 +1,10 @@
 
 package com.variamos.ng;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
-import com.google.protobuf.Message;
 import com.variamos.ng.ModelPublisherGrpc.ModelPublisherBlockingStub;
 import com.variamos.ng.ModelPublisherGrpc.ModelPublisherStub;
 
@@ -48,7 +41,9 @@ public class App {
 	}
 
 	public static void main(String args[]) {
-		App app = new App("localhost", 50051);
+		final String host=System.getenv("SERVER");
+		final int port = Integer.parseInt(System.getenv("PORT"));
+		App app = new App(host, port);
 
 		StreamObserver<Model> modelObserver = new StreamObserver<Model>() {
 
@@ -56,7 +51,7 @@ public class App {
 			public void onNext(Model value) {
 
 				System.out.println(String.format("new model value is %d ", value.getCounter()));
-				model=value;
+				model = value;
 
 			}
 
@@ -75,46 +70,36 @@ public class App {
 		};
 		app.asyncStub.listenModels(Empty.getDefaultInstance(), modelObserver);
 
-		
-
 		Thread t = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				Scanner scanner = new Scanner(System.in);
+				Random rand = new Random();
 				while (true) {
 
-					ScriptEngineManager mgr = new ScriptEngineManager();
-					ScriptEngine engine = mgr.getEngineByName("JavaScript");
+					int delta = rand.nextInt(10) - 5;
+					model = Model.newBuilder(model).setCounter(model.getCounter() + delta).build();
 
-					String input = "" + scanner.next();
-					System.out.println(input);
-					String foo = String.format("%d%s", model.getCounter(), input);
+					app.blockingStub.pushModel(model);
+					System.out.println("delta " + delta);
 					try {
-						model = Model.newBuilder(model).setCounter(Long.parseLong(engine.eval(foo).toString())).build();
-						System.out.println(foo);
-						app.blockingStub.pushModel(model);
-					} catch (NumberFormatException | ScriptException e) {
-						System.out.println("invalid model update discarded, try +1 or -5");
-					}
-					try {
-						Thread.currentThread().sleep(10);
+
+						Thread.sleep(rand.nextInt(500));
 					} catch (InterruptedException e) {
-
+						// noop
 					}
-
 				}
-				
 
 			}
 		});
 		t.start();
 
-		try {
+		try
+
+		{
 			t.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// noop
 		}
 	}
 }
