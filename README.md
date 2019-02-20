@@ -11,6 +11,13 @@ for example, on ubuntu 18.04 for release 3.6.1 installation can be done with:
 sudo unzip protoc-3.6.1-linux-x86_64.zip -d /usr/local/
 ```
 
+## Business
+
+The business is very simple: once the server is started, whenever a client send a message to the server, the server broadcasts it to every other clients having an open channel.
+
+The server owns a Model object sent to every client uppon update. Each client, periodically randomly udates the model by updating its fields , and send it to the server for broadcasting.
+
+
 ## usage
 
 every operation is down through de make file

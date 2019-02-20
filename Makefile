@@ -29,7 +29,7 @@ clean-images:
 	
 	
 
-.DEFAULT all: clean python java images
+.DEFAULT all: clean python java images run
 
 images: 
 	@sudo docker images |grep grpc
@@ -54,6 +54,18 @@ run:
 	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
 	#sleep 1 
 	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
+	#sleep 1 
+	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
+	#sleep 1 
+	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
+	#sleep 1 
+	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
+	#sleep 1 
+	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
+	#sleep 1 
+	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
+	#sleep 1 
+	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
 	#sleep 1 
 	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
 	#sleep 1 
