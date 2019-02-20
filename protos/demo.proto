@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "com.variamos.ng";
+
+
+package variamosgrpc;
+
+
+service ModelPublisher {
+  
+  rpc pushModel (stream Model) returns (stream Model) {}
+}
+
+
+message Model {
+  string message = 1;
+}
+
+
