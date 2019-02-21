@@ -46,31 +46,5 @@ python: prereq_python python_grpc
 python_grpc: 
 	python -m grpc_tools.protoc -Iprotos --python_out=python --grpc_python_out=python protos/demo.proto
 
-run: 
-	sudo docker run  -tid -e PORT=8080 -p 8080:8080 --rm --name=server -l variamos nherbaut/grpc-demo-py-server
-	sleep 1
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-java-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
-	#sleep 1 
-	sudo docker run  -tid -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080  -l variamos nherbaut/grpc-demo-py-client
-	#sleep 1 
-	sudo docker run  -ti -e SERVER=$$(sudo docker inspect server  --format="{{ .NetworkSettings.IPAddress }}") -e PORT=8080   -l variamos nherbaut/grpc-demo-py-client
+run:
+	docker-compose up --scale client-java=5 --scale client-python=5

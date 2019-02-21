@@ -1,0 +1,23 @@
+version: '3'
+services:
+  server:
+    image: "nherbaut/grpc-demo-py-server"
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+  client-python:
+    image: "nherbaut/grpc-demo-py-client"
+    environment:
+      - PORT=8080
+      - SERVER=server
+    depends_on:
+      - server
+
+  client-java:
+    image: "nherbaut/grpc-demo-java-client"
+    environment:
+      - PORT=8080
+      - SERVER=server
+    depends_on:
+      - server
